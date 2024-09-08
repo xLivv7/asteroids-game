@@ -3,7 +3,11 @@ import pygame
 from constants import *
 from circleshape import *
 class Player(CircleShape):
+    containers = None   
+
     def __init__(self,x,y):
+        if Player.containers:
+            pygame.sprite.Sprite.__init__(self, self.containers)
         self.position = pygame.Vector2(x,y)
         super().__init__( self.position.x, self.position.y, PLAYER_RADIUS)
         self.rotation = 0
@@ -18,6 +22,9 @@ class Player(CircleShape):
     
     def rotate(self, dt):
         self.rotation +=(PLAYER_TURN_SPEED*dt)
+
+    def draw(self, screen):
+        pygame.draw.polygon(screen, "white", self.triangle(), 2)
 
     def update(self, dt):
         keys = pygame.key.get_pressed()
