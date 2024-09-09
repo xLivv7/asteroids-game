@@ -4,10 +4,14 @@ from player import *
 from circleshape import *
 from asteroid import *
 from asteroidfield import *
-
+import sys
+import time
 
 def main():
     pygame.init()
+    font = pygame.font.Font(None, 74)
+    text = font.render("Game Over", True, (255, 0, 0))
+    text_rect = text.get_rect(center=(SCREEN_WIDTH/2, SCREEN_HEIGHT/2))
     screen = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
      
     updatable = pygame.sprite.Group()
@@ -36,6 +40,17 @@ def main():
         dt = clock.tick(60)/1000
         for thing in updatable:
             thing.update(dt)
+        
+        for asteroid in asteroids:
+            if player.check_collision(asteroid):
+                print("Game over!")
+                screen.fill("black")
+                screen.blit(text, text_rect)
+                pygame.display.flip()
+                time.sleep(3)
+                sys.exit()
+        
+
         for thing in drawable:
             thing.draw(screen)
         pygame.display.flip()
